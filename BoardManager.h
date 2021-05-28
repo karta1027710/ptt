@@ -15,7 +15,7 @@ class BoardManager {
 		Board board = Board(this->db);
 		User user = User(this->db);
 
-		void loginMenu();
+		void loginMenu(int);
 		void registerAccount();
 		void login(int status);
 		void mainMenu(int index);
@@ -31,27 +31,32 @@ class BoardManager {
 		void viewInsertPost(int index);
 };
 
-void BoardManager::loginMenu() {
-	this->viewer.printMessage("輸入/login 登入 or /register 註冊帳號: ");
+void BoardManager::loginMenu(int status/*判斷輸入無效指令*/) {
+	this->viewer.LoginMenu(status);
 	std::string input;
 	std::cin >> input;
 
 	if (input == "/login") {
+		system("cls");
 		this->login(0);
 		return;
 	}
 
 	if (input == "/register") {
+		this->viewer.clearScreen();
 		this->registerAccount();
 		return;
 	}
-
-	this->loginMenu();
+	system("cls");
+	this->loginMenu(1);
+	
 	return;
 }
 
 void BoardManager::registerAccount() {
 	std::string account, password, confirmPassword;
+
+	viewer.signUp();
 
 	this->viewer.printMessage("輸入帳號: ");
 	std::cin >> account;
@@ -90,14 +95,14 @@ void BoardManager::registerAccount() {
 /// 登入 更改viewer地方就好
 /// </summary>
 void BoardManager::login(int status) {
-	this->viewer.printMessage("輸入帳號密碼: \n");
+	if (status == 0)this->viewer.Login();
+	else this->viewer.reLogin();
 
 	int isLogin = 0;
 	isLogin = this->user.login();
 
 	if (!isLogin) {
 		this->viewer.clearScreen();
-		this->viewer.printMessage("帳號或密碼錯誤\n\n");
 		this->login(1);
 		return;
 	}
@@ -117,27 +122,36 @@ void BoardManager::login(int status) {
 void BoardManager::mainMenu(int index) {
 	/* 改這邊的viewer主菜單就可以了*/
 	if (this->user.user[0][3]["level"] == "1") {
-		std::cout << index << '\n';
+		viewer.adminMainMenu(index);
+		/*std::cout << index << '\n';
 		this->viewer.printMessage("管理員功能介面\n");
 		this->viewer.printMessage("ManagerBoard\t【管理看板】\n");
 		this->viewer.printMessage("Announce    \t【所有看板】\n");
 		this->viewer.printMessage("WritePost   \t【新增文章】\n");
-		this->viewer.printMessage("Mail        \t【信    箱】\n");
+		this->viewer.printMessage("Mail        \t【信    箱】\n");*/
 
 		char input = _getch();
 		input = _getch();
-
+		system("cls");
 		switch (input)
 		{
 			case 72: //上
 				if (index > 1) {
 					index--;
 				}
+				else if (index == 1)//跳到最後一行
+				{
+					index = 4;
+				}
 				this->mainMenu(index);
 				break;
 			case 80: //下
-				if (index < 3) {
+				if (index < 4) {
 					index++;
+				}
+				else if (index == 4)//跳到第一行
+				{
+					index = 1;
 				}
 				this->mainMenu(index);
 				break;
@@ -159,7 +173,7 @@ void BoardManager::mainMenu(int index) {
 				}
 				break;
 			case 75: //左
-				this->loginMenu();
+				this->loginMenu(0);
 				break;
 			default:
 				this->mainMenu(1);
@@ -174,6 +188,7 @@ void BoardManager::mainMenu(int index) {
 
 		char input = _getch();
 		input = _getch();
+
 	}
 
 	return;
@@ -185,17 +200,17 @@ void BoardManager::mainMenu(int index) {
 void BoardManager::viewAllBoard(int index) {
 	this->viewer.clearScreen();
 
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
-
-	for (auto board : allBoard) {
+	viewer.allBoard(allBoard, boardColumn, index);
+	/*for (auto board : allBoard) {
 		for (size_t i = 2; i < boardColumn.size();i++) {
 			this->viewer.printMessage(board[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
+	}*/
 
 	char input = _getch();
 	input = _getch();
@@ -206,11 +221,19 @@ void BoardManager::viewAllBoard(int index) {
 			if (index > 1) {
 				index--;
 			}
+			else if (index == 1)
+			{
+				index = allBoard.size();
+			}
 			this->viewAllBoard(index);
 			break;
 		case 80: //下
 			if (index < allBoard.size()) {
 				index++;
+			}
+			else if (index == allBoard.size())
+			{
+				index = 1;
 			}
 			this->viewAllBoard(index);
 			break;
@@ -233,26 +256,34 @@ void BoardManager::viewAllBoard(int index) {
 /// </summary>
 void BoardManager::adminManagerBoard(int index) {
 	/*改這邊就是管理看板*/
-	std::cout << index << '\n';
+	/*std::cout << index << '\n';
 	this->viewer.printMessage("管理看板\n");
 	this->viewer.printMessage("InsertBoard\t【新增看板】\n");
 	this->viewer.printMessage("EditBoard  \t【編輯看板】\n");
-	this->viewer.printMessage("DeleteBoard\t【刪除看板】\n");
-
+	this->viewer.printMessage("DeleteBoard\t【刪除看板】\n");*/
+	viewer.adminManageBoard(index);
 	char input = _getch();
 	input = _getch();
-
+	system("cls");
 	switch (input)
 	{
 		case 72: //上
 			if (index > 1) {
 				index--;
 			}
+			else if (index == 1)
+			{
+				index = 3;
+			}
 			this->adminManagerBoard(index);
 			break;
 		case 80: //下
 			if (index < 3) {
 				index++;
+			}
+			else if (index == 3)
+			{
+				index = 1;
 			}
 			this->adminManagerBoard(index);
 			break;
@@ -302,11 +333,13 @@ void BoardManager::adminInsertBoard() {
 	this->viewer.printMessage("新增看板\n");
 	
 	while (true) {
+		this->viewer.printMessage("返回請輸入/back\n");
 		this->viewer.printMessage("輸入看板名稱: ");
 
 		std::cin >> name;
 
 		if (name == "/back") {
+			this->viewer.clearScreen();
 			this->adminManagerBoard(1);
 			return;
 		}
@@ -321,6 +354,7 @@ void BoardManager::adminInsertBoard() {
 		std::cin >> className;
 
 		if (className == "/back") {
+			this->viewer.clearScreen();
 			this->adminManagerBoard(1);
 			return;
 		}
@@ -330,6 +364,7 @@ void BoardManager::adminInsertBoard() {
 		std::cin >> title;
 
 		if (title == "/back") {
+			this->viewer.clearScreen();
 			this->adminManagerBoard(1);
 			return;
 		}
@@ -339,6 +374,7 @@ void BoardManager::adminInsertBoard() {
 		std::cin >> userAccount;
 
 		if (userAccount == "/back") {
+			this->viewer.clearScreen();
 			this->adminManagerBoard(1);
 			return;
 		}
@@ -373,17 +409,17 @@ void BoardManager::adminInsertBoard() {
 /// </summary>
 void BoardManager::adminEditBoard(int index) {
 	this->viewer.clearScreen();
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
 
-	for (auto board : allBoard) {
+	/*for (auto board : allBoard) {
 		for (size_t i = 0; i < boardColumn.size(); i++) {
 			this->viewer.printMessage(board[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
-
+	}*/
+	viewer.allBoard(allBoard, boardColumn, index+1);
 	char input = _getch();
 	input = _getch();
 
@@ -399,17 +435,26 @@ void BoardManager::adminEditBoard(int index) {
 			if (index > 0) {
 				index--;
 			}
+			else if (index == 0)
+			{
+				index = allBoard.size();
+			}
 			this->adminEditBoard(index);
 			break;
 		case 80: //下
 			if (index < allBoard.size() - 1) {
 				index++;
 			}
+			else if (index == allBoard.size()-1)
+			{
+				index = 0;
+			}
 			this->adminEditBoard(index);
 			break;
 		case 77: //右
 			while (true) {
-				this->viewer.printMessage("輸入看板名稱");
+				this->viewer.printMessage("返回輸入/back\n\n");
+				this->viewer.printMessage("輸入看板名稱: ");
 
 				std::cin >> name;
 
@@ -418,6 +463,7 @@ void BoardManager::adminEditBoard(int index) {
 				}
 
 				if (name == "/back") {
+					this->viewer.clearScreen();
 					this->adminManagerBoard(1);
 					return;
 				}
@@ -427,7 +473,7 @@ void BoardManager::adminEditBoard(int index) {
 					continue;
 				}
 
-				this->viewer.printMessage("輸入看板類別");
+				this->viewer.printMessage("輸入看板類別: ");
 
 				std::cin >> className;
 
@@ -436,11 +482,12 @@ void BoardManager::adminEditBoard(int index) {
 				}
 
 				if (className == "/back") {
+					this->viewer.clearScreen();
 					this->adminManagerBoard(1);
 					return;
 				}
 
-				this->viewer.printMessage("輸入看板標題");
+				this->viewer.printMessage("輸入看板標題: ");
 
 				std::cin >> title;
 
@@ -449,6 +496,7 @@ void BoardManager::adminEditBoard(int index) {
 				}
 
 				if (title == "/back") {
+					this->viewer.clearScreen();
 					this->adminManagerBoard(1);
 					return;
 				}
@@ -458,6 +506,7 @@ void BoardManager::adminEditBoard(int index) {
 				std::cin >> userAccount;
 
 				if (userAccount == "/back") {
+					this->viewer.clearScreen();
 					this->adminManagerBoard(1);
 					return;
 				}
@@ -485,6 +534,7 @@ void BoardManager::adminEditBoard(int index) {
 			}
 			break;
 		case 75: //左
+			viewer.clearScreen();
 			this->adminManagerBoard(1);
 			break;
 		default:
@@ -498,16 +548,16 @@ void BoardManager::adminEditBoard(int index) {
 /// </summary>
 void BoardManager::adminDeleteBoard(int index) {
 	this->viewer.clearScreen();
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
-
-	for (auto board : allBoard) {
+	viewer.allBoard(allBoard, boardColumn, index + 1);
+	/*for (auto board : allBoard) {
 		for (size_t i = 0; i < boardColumn.size(); i++) {
 			this->viewer.printMessage(board[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
+	}*/
 
 	std::string confirm;
 	char input = _getch();
@@ -519,11 +569,19 @@ void BoardManager::adminDeleteBoard(int index) {
 			if (index > 0) {
 				index--;
 			}
+			else if (index == 0)
+			{
+				index = allBoard.size();
+			}
 			this->adminDeleteBoard(index);
 			break;
 		case 80: //下
 			if (index < allBoard.size() - 1) {
 				index++;
+			}
+			else if (index == allBoard.size() - 1)
+			{
+				index = 0;
 			}
 			this->adminDeleteBoard(index);
 			break;
@@ -541,6 +599,7 @@ void BoardManager::adminDeleteBoard(int index) {
 				}
 
 				if (confirm == "/no") {
+					viewer.clearScreen();
 					this->adminManagerBoard(1);
 					return;
 				}
@@ -549,6 +608,7 @@ void BoardManager::adminDeleteBoard(int index) {
 			}
 			break;
 		case 75: //左
+			viewer.clearScreen();
 			this->adminManagerBoard(1);
 			break;
 		default:
