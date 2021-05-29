@@ -150,10 +150,10 @@ void BoardManager::mainMenu(int index) {
 				this->mainMenu(index);
 				break;
 			case 80: //下
-				if (index < 7) {
+				if (index < 6) {
 					index++;
 				}
-				else if (index == 7)//跳到第一行
+				else if (index == 6)//跳到第一行
 				{
 					index = 1;
 				}
@@ -176,6 +176,10 @@ void BoardManager::mainMenu(int index) {
 						break;
 					case 5:
 						this->viewDeletePost(1);
+						break;
+					case 6:
+						viewer.clearScreen();
+						std::cout << "NOT done yet!";
 						break;
 					default:
 						this->mainMenu(1);
@@ -633,36 +637,37 @@ void BoardManager::adminDeleteBoard(int index) {
 void BoardManager::viewAllPost(int board_id, int index) {
 	this->viewer.clearScreen();
 
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> allPost = this->board.getAllPost(board_id);
 	std::vector<std::string> postColumn = this->board.getPostAllColunm();
 
-	for (auto board : allPost) {
+	/*for (auto board : allPost) {
 		for (size_t i = 2; i < postColumn.size(); i++) {
 			this->viewer.printMessage(board[i][postColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
-
+	}*/
+	viewer.allpost(allPost, postColumn, 0);
 	char input = _getch();
 	input = _getch();
+	if (input == 75)viewAllBoard(1);
 }
 
 void BoardManager::viewInsertPost(int index) {
 	this->viewer.clearScreen();
 
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
-
-	for (auto board : allBoard) {
+	viewer.allpost(allBoard, boardColumn, index);
+	/*for (auto board : allBoard) {
 		for (size_t i = 2; i < boardColumn.size(); i++) {
 			this->viewer.printMessage(board[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
+	}*/
 
 	std::string title, text;
 	char input = _getch();
@@ -674,11 +679,19 @@ void BoardManager::viewInsertPost(int index) {
 		if (index > 1) {
 			index--;
 		}
+		else if (index == 1)
+		{
+			index = allBoard.size();
+		}
 		this->viewInsertPost(index);
 		break;
 	case 80: //下
 		if (index < allBoard.size()) {
 			index++;
+		}
+		else if (index == allBoard.size())
+		{
+			index = 1;
 		}
 		this->viewInsertPost(index);
 		break;
@@ -720,6 +733,7 @@ void BoardManager::viewInsertPost(int index) {
 
 		break;
 	case 75: //左
+		viewer.clearScreen();
 		this->mainMenu(1);
 		break;
 	default:
@@ -733,17 +747,18 @@ void BoardManager::viewInsertPost(int index) {
 void BoardManager::viewEditPost(int index) {
 	this->viewer.clearScreen();
 
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
 
-	for (auto post : userAllPost) {
+	viewer.allpost(userAllPost, boardColumn, index);
+	/*for (auto post : userAllPost) {
 		for (size_t i = 2; i < boardColumn.size(); i++) {
 			this->viewer.printMessage(post[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
+	}*/
 
 	std::string title, text;
 	char input = _getch();
@@ -755,11 +770,19 @@ void BoardManager::viewEditPost(int index) {
 		if (index > 1) {
 			index--;
 		}
+		else if (index == 1)
+		{
+			index = userAllPost.size();
+		}
 		this->viewEditPost(index);
 		break;
 	case 80: //下
 		if (index < userAllPost.size()) {
 			index++;
+		}
+		else if (index == userAllPost.size())
+		{
+			index = 1;
 		}
 		this->viewEditPost(index);
 		break;
@@ -796,6 +819,7 @@ void BoardManager::viewEditPost(int index) {
 
 		break;
 	case 75: //左
+		viewer.clearScreen();
 		this->mainMenu(1);
 		break;
 	default:
@@ -809,17 +833,19 @@ void BoardManager::viewEditPost(int index) {
 void BoardManager::viewDeletePost(int index) {
 	this->viewer.clearScreen();
 
-	std::cout << index << '\n';
+	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
 
-	for (auto post : userAllPost) {
+	/*for (auto post : userAllPost) {
 		for (size_t i = 2; i < boardColumn.size(); i++) {
 			this->viewer.printMessage(post[i][boardColumn[i]] + '\t');
 		}
 		this->viewer.printMessage("\n");
-	}
+	}*/
+
+	viewer.allpost(userAllPost, boardColumn, index);
 
 	std::string confirm;
 	char input = _getch();
@@ -831,11 +857,19 @@ void BoardManager::viewDeletePost(int index) {
 		if (index > 1) {
 			index--;
 		}
+		else if (index == 1)
+		{
+			index = userAllPost.size();
+		}
 		this->viewDeletePost(index);
 		break;
 	case 80: //下
 		if (index < userAllPost.size()) {
 			index++;
+		}
+		else if (index == userAllPost.size())
+		{
+			index = 1;
 		}
 		this->viewDeletePost(index);
 		break;
@@ -860,6 +894,7 @@ void BoardManager::viewDeletePost(int index) {
 
 		break;
 	case 75: //左
+		viewer.clearScreen();
 		this->mainMenu(1);
 		break;
 	default:

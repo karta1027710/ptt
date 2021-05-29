@@ -1,2 +1,6 @@
 ﻿  main.cpp
-  ptt.vcxproj -> C:\Users\karta\OneDrive\桌面\ptt\x64\Debug\ptt.exe
+C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(236,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(452,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(586,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+LINK : fatal error LNK1104: 無法開啟檔案 'libmysql.lib'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(997,5): error MSB6006: "link.exe" 以返回碼 1104 結束。
