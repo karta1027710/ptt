@@ -20,6 +20,8 @@ class User {
 
 		int findUserId(std::string account);
 
+		std::string getUserAccount(int user_id);
+
 		bool insertUser(std::string account, std::string password);
 };
 
@@ -51,6 +53,18 @@ int User::findUserId(std::string account) {
 	}
 
 	return stoi(data[0][0]["id"]);
+}
+
+std::string User::getUserAccount(int user_id) {
+	std::string sql = "select * from `users` where `id` = '" + std::to_string(user_id) + "'";
+
+	auto data = this->db->Select(sql);
+
+	if (data.size() == 0) {
+		return "";
+	}
+
+	return data[0][1]["account"];
 }
 
 bool User::insertUser(std::string account, std::string password) {
