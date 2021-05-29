@@ -16,7 +16,7 @@ class Board {
 
 		std::vector<std::vector<std::map<std::string, std::string>>> getAllBoard();
 
-		std::vector<std::vector<std::map<std::string, std::string>>> getAllPost();
+		std::vector<std::vector<std::map<std::string, std::string>>> getAllPost(int board_id);
 
 		std::vector<std::vector<std::map<std::string, std::string>>> getUserPost(int user_id);
 
@@ -110,8 +110,8 @@ bool Board::deleteBoard(int id) {
 	return false;
 }
 
-std::vector<std::vector<std::map<std::string, std::string>>> Board::getAllPost() {
-	return this->db->Select("select * from `posts`");
+std::vector<std::vector<std::map<std::string, std::string>>> Board::getAllPost(int board_id) {
+	return this->db->Select("select * from `posts` where `board_id` = " + std::to_string(board_id));
 }
 
 bool Board::insertPost(int board_id, int user_id, std::string title, std::string text) {

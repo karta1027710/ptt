@@ -26,7 +26,7 @@ class BoardManager {
 
 		void viewAllBoard(int index);
 
-		void viewAllPost(int boardIndex);
+		void viewAllPost(int board_id, int boardIndex);
 
 		void viewInsertPost(int index);
 
@@ -248,7 +248,7 @@ void BoardManager::viewAllBoard(int index) {
 			this->viewAllBoard(index);
 			break;
 		case 77: //еk
-			this->viewAllPost(index);
+			this->viewAllPost(std::stoi(allBoard[index-1][0]["id"]), index);
 			break;
 		case 75: //ек
 			system("cls");
@@ -630,12 +630,12 @@ void BoardManager::adminDeleteBoard(int index) {
 }
 
 
-void BoardManager::viewAllPost(int index) {
+void BoardManager::viewAllPost(int board_id, int index) {
 	this->viewer.clearScreen();
 
 	std::cout << index << '\n';
 
-	std::vector<std::vector<std::map<std::string, std::string>>> allPost = this->board.getAllPost();
+	std::vector<std::vector<std::map<std::string, std::string>>> allPost = this->board.getAllPost(board_id);
 	std::vector<std::string> postColumn = this->board.getPostAllColunm();
 
 	for (auto board : allPost) {
