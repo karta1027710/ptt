@@ -1,7 +1,9 @@
 ﻿  main.cpp
-C:\Users\user\Desktop\PTT\Viewer.h(198,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\PTT\BoardManager.h(231,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\PTT\BoardManager.h(445,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\PTT\BoardManager.h(579,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\PTT\BoardManager.h(667,13): warning C4018: '<': signed/unsigned 不相符
-  ptt.vcxproj -> C:\Users\user\Desktop\PTT\Debug\ptt.exe
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(214,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(241,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(457,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(591,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(680,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(761,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(837,13): warning C4018: '<': signed/unsigned 不相符
+  ptt.vcxproj -> C:\Users\karta\OneDrive\桌面\ptt\Debug\ptt.exe

@@ -155,6 +155,22 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 4)
     {
+        std::cout << "-> EditPost    \t【編輯文章】\n";
+    }
+    else
+    {
+        std::cout << "   EditPost    \t【編輯文章】\n";
+    }
+    if(status == 5)
+    {
+        std::cout << "-> DeletePost  \t【刪除文章】\n";
+    }
+    else
+    {
+        std::cout << "   DeletePost  \t【刪除文章】\n";
+    }
+    if (status == 6)
+    {
         std::cout << "-> Mail        \t【信    箱】\n\n\n";
     }
     else
