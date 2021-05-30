@@ -617,29 +617,29 @@ void BoardManager::viewAllPost(int board_id, int index) {
 	std::vector<std::vector<std::map<std::string, std::string>>> allPost = this->board.getAllPost(board_id);
 	std::vector<std::string> postColumn = this->board.getPostAllColunm();
 
-	viewer.allpost(allPost, postColumn, 0);
+	viewer.allpost(allPost, postColumn, index);
 	char input = _getch();
 	input = _getch();
 
 	switch (input)
 	{
 	case 72: //上
-		if (index > 0) {
+		if (index > 1) {
 			index--;
 		}
-		else if (index == 0)
+		else if (index == 1)
 		{
 			index = allPost.size();
 		}
 		this->viewAllPost(board_id, index);
 		break;
 	case 80: //下
-		if (index < allPost.size() - 1) {
+		if (index < allPost.size() ) {
 			index++;
 		}
-		else if (index == allPost.size() - 1)
+		else if (index == allPost.size() )
 		{
-			index = 0;
+			index = 1;
 		}
 		this->viewAllPost(board_id, index);
 		break;
@@ -911,13 +911,13 @@ void BoardManager::viewOnePost(int post_id) {
 		comment[2]["user_id"] = this->user.getUserAccount(std::stoi(comment[2]["user_id"]));
 	}
 
-	this->viewer.printMessage("看板: " + post[0][1]["board_id"] + "\n");
+	this->viewer.printMessage("看板: " + post[0][1]["board_id"] + "\n\n");
 
-	this->viewer.printMessage("發文者: " + user + "\n");
+	this->viewer.printMessage("發文者: " + user + "\n\n");
 
-	this->viewer.printMessage("標題: " + post[0][3]["title"] + "\n");
+	this->viewer.printMessage("標題: " + post[0][3]["title"] + "\n\n");
 
-	this->viewer.printMessage("時間: " + post[0][5]["created_at"] + "\n");
+	//this->viewer.printMessage("時間: " + post[0][5]["created_at"] + "\n");
 
 	this->viewer.printMessage("文章: \n" + post[0][4]["text"] + "\n\n\n");
 

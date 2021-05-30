@@ -5,6 +5,9 @@
 #include<vector>
 #include<map>
 class Viewer {
+private:
+    int beforeColor = 15;
+    int beforeColorP = 15;
 public:
     void printMessage(std::string);
     void clearScreen();
@@ -17,6 +20,9 @@ public:
     void adminManageBoard(int);
     void allBoard(std::vector<std::vector<std::map<std::string, std::string>>>, const std::vector<std::string>, int);
     void Login();
+    void Color(int);
+    void printPTT();
+    void printPoint();
 };
 
 void Viewer::printMessage(std::string str)
@@ -30,11 +36,8 @@ void Viewer::clearScreen() {
 
 void Viewer::LoginMenu(int status)
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n";
+    printPTT();
+
     std::cout << "   ◢██████◣　　　　　　         ◢████◣                   \n\n";
     std::cout << "◢◤　　　　　　◥◣　　　　◢◤　　　　◥◣           \n\n";
     std::cout << "◤　　　　　　　　◥◣　　◢◤　　　　　　█         \n\n";
@@ -71,13 +74,10 @@ void Viewer::reLogin()
 
 void Viewer::allpost(std::vector<std::vector<std::map<std::string, std::string>>> allpost, std::vector<std::string>postColumn, int status)
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n\n";
+    printPTT();
+
     for (int k = 0; k < allpost.size(); k++) {
-        if (k + 1 == status) std::cout << "-> ";
+        if (k + 1 == status) printPoint();
         else std::cout << "   ";
         for (size_t i = 2; i < postColumn.size(); i++) {
             std::cout << allpost[k][i][postColumn[i]] << '\t';
@@ -139,15 +139,13 @@ void Viewer::resignUP()
 
 void Viewer::adminMainMenu(int status)
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n\n";
+    printPTT();
+
     std::cout << "管理員功能介面\n\n";
     if (status == 1)
     {
-        std::cout << "-> ManagerBoard\t【管理看板】\n";
+        printPoint();
+        std::cout << "ManagerBoard\t【管理看板】\n";
     }
     else
     {
@@ -155,7 +153,8 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 2)
     {
-        std::cout << "-> Announce    \t【所有看板】\n";
+        printPoint();
+        std::cout << "Announce    \t【所有看板】\n";
     }
     else
     {
@@ -163,7 +162,8 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 3)
     {
-        std::cout << "-> WritePost   \t【新增文章】\n";
+        printPoint();
+        std::cout << "WritePost   \t【新增文章】\n";
     }
     else
     {
@@ -171,7 +171,8 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 4)
     {
-        std::cout << "-> EditPost    \t【編輯文章】\n";
+        printPoint();
+        std::cout << "EditPost    \t【編輯文章】\n";
     }
     else
     {
@@ -179,7 +180,8 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 5)
     {
-        std::cout << "-> DeletePost  \t【刪除文章】\n";
+        printPoint();
+        std::cout << "DeletePost  \t【刪除文章】\n";
     }
     else
     {
@@ -187,7 +189,8 @@ void Viewer::adminMainMenu(int status)
     }
     if (status == 6)
     {
-        std::cout << "-> Mail        \t【信    箱】\n\n\n";
+        printPoint();
+        std::cout << "Mail        \t【信    箱】\n\n\n";
     }
     else
     {
@@ -198,14 +201,12 @@ void Viewer::adminMainMenu(int status)
 
 inline void Viewer::adminManageBoard(int status)
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n\n";
+    printPTT();
+
     if (status == 1)
     {
-        std::cout << "-> InsertBoard\t【新增看板】\n";
+        printPoint();
+        std::cout << "InsertBoard\t【新增看板】\n";
     }
     else
     {
@@ -213,7 +214,8 @@ inline void Viewer::adminManageBoard(int status)
     }
     if (status == 2)
     {
-        std::cout << "-> EditBoard  \t【編輯看板】\n";
+        printPoint();
+        std::cout << "EditBoard  \t【編輯看板】\n";
     }
     else
     {
@@ -221,7 +223,8 @@ inline void Viewer::adminManageBoard(int status)
     }
     if (status == 3)
     {
-        std::cout << "-> DeleteBoard\t【刪除看板】\n\n";
+        printPoint();
+        std::cout << "DeleteBoard\t【刪除看板】\n\n";
     }
     else
     {
@@ -232,13 +235,10 @@ inline void Viewer::adminManageBoard(int status)
 
 void Viewer::allBoard(std::vector<std::vector<std::map<std::string, std::string>>> allBoard, std::vector<std::string>boardColumn, int status)
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n\n";
+    printPTT();
     for (int k = 0; k < allBoard.size(); k++) {
-        if (k + 1 == status) std::cout << "-> ";
+        if (k + 1 == status)         printPoint();
+        
         else std::cout << "   ";
         for (size_t i = 2; i < boardColumn.size(); i++) {
             std::cout << allBoard[k][i][boardColumn[i]] << '\t';
@@ -251,11 +251,7 @@ void Viewer::allBoard(std::vector<std::vector<std::map<std::string, std::string>
 
 void Viewer::Login()
 {
-    std::cout << "■■■      ■■■■■      ■■■■■\n";
-    std::cout << "■   ■         ■              ■\n";
-    std::cout << "■■■          ■              ■\n";
-    std::cout << "■              ■              ■\n";
-    std::cout << "■              ■              ■\n\n";
+    printPTT();
     std::cout << "┴┬┴┬／￣＼＿／￣＼\n\n";
     std::cout << "┬┴┬┴▏　　▏▔▔▔▔＼\n\n";
     std::cout << "┴┬┴／＼　／　　　　　　﹨\n\n";
@@ -270,5 +266,41 @@ void Viewer::Login()
     std::cout << "。。。○ 輸入帳號及密碼\n";
 }
 
+inline void Viewer::Color(int color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+inline void Viewer::printPTT()
+{
+    srand(time(NULL));
+    int i = rand() % 14 + 1;
+    while (i == beforeColor)
+    {
+         i = rand() % 14 + 1;
+    }
+    beforeColor = i;
+    Color(i);
+    std::cout << "■■■      ■■■■■      ■■■■■\n";
+    std::cout << "■   ■         ■              ■\n";
+    std::cout << "■■■          ■              ■\n";
+    std::cout << "■              ■              ■\n";
+    std::cout << "■              ■              ■\n\n";
+    Color(15);
+}
+
+inline void Viewer::printPoint()
+{
+    srand(time(NULL));
+    int i = rand() % 14 + 1;
+    while (i == beforeColorP)
+    {
+        i = rand() % 14 + 1;
+    }
+    beforeColor = i;
+    Color(i);
+    std::cout << "-> ";
+    Color(15);
+}
 
 
