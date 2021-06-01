@@ -44,9 +44,17 @@ class Board {
 
 		bool deletePost(int post_id);
 
+		bool adminDeletePost(int post_id, std::string title, std::string text);
+
+		bool adminDeleteComment(int comment_id, std::string text);
+
 		bool isLeavedComment(int post_id, int user_id);
 
 		bool insertComment(int post_id, int user_id, int action, std::string text);
+
+		bool addHot(int board_id);
+
+		bool isHot(int post_id);
 };
 
 std::vector<std::vector<std::map<std::string, std::string>>> Board::getAllBoard() {
@@ -180,6 +188,33 @@ bool Board::deletePost(int post_id) {
 	return false;
 }
 
+bool Board::adminDeletePost(int post_id, std::string title, std::string text) {
+	std::vector<std::pair<std::string, std::string>> data;
+
+	data.push_back(std::pair<std::string, std::string>("title", title));
+	data.push_back(std::pair<std::string, std::string>("text", text));
+	data.push_back(std::pair<std::string, std::string>("isDeleted", "1"));
+
+	if (this->db->UpdateData("posts", post_id, data)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Board::adminDeleteComment(int comment_id, std::string text) {
+	std::vector<std::pair<std::string, std::string>> data;
+
+	data.push_back(std::pair<std::string, std::string>("text", text));
+	data.push_back(std::pair<std::string, std::string>("isDeleted", "1"));
+
+	if (this->db->UpdateData("comments", comment_id, data)) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Board::isLeavedComment(int post_id, int user_id) {
 	std::string sql = "select * from `comments` where `post_id` = " + std::to_string(post_id) + " and `user_id` = " + std::to_string(user_id);
 
@@ -201,6 +236,25 @@ bool Board::insertComment(int post_id, int user_id, int action, std::string text
 	data.push_back(std::pair<std::string, std::string>("text", text));
 
 	if (this->db->InsertData("comments", data)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Board::addHot(int board_id) {
+	if (this->db->query("update `boards` set `hot` = `hot` + 1 where `id` = " + std::to_string(board_id))) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Board::isHot(int post_id) {
+	auto pushCount = this->db->Select("select count(`action`) from `comments` where `action` = 1 and `isDeleted` = 0 and `post_id` = " + std::to_string(post_id));
+	auto shCount = this->db->Select("select count(`action`) from `comments` where `action` = 2 and `isDeleted` = 0 and `post_id` = " + std::to_string(post_id));
+	
+	if ((std::stoi(pushCount[0][0]["count(`action`)"]) - std::stoi(shCount[0][0]["count(`action`)"])) > 5) {
 		return true;
 	}
 

@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "User.h"
+#include "Mail.h"
 #include "Board.h"
 #include "Viewer.h"
 #include "Database.h"
@@ -14,6 +15,7 @@ class BoardManager {
 		Viewer viewer;
 		Board board = Board(this->db);
 		User user = User(this->db);
+		Mail mail = Mail(this->db);
 
 		void loginMenu(int);
 		void registerAccount();
@@ -36,6 +38,10 @@ class BoardManager {
 		void viewDeletePost(int index);
 
 		void viewOnePost(int post_id);
+
+		void viewMail(int index);
+
+		void viewOneMail(int mail_id);
 };
 
 void BoardManager::loginMenu(int status/*判斷輸入無效指令*/) {
@@ -52,6 +58,12 @@ void BoardManager::loginMenu(int status/*判斷輸入無效指令*/) {
 	if (input == "/register") {
 		this->viewer.clearScreen();
 		this->registerAccount();
+		return;
+	}
+
+	if (input == "/guest") {
+		this->viewer.clearScreen();
+		this->viewAllBoard(1);
 		return;
 	}
 	system("cls");
@@ -173,8 +185,7 @@ void BoardManager::mainMenu(int index) {
 						this->viewDeletePost(1);
 						break;
 					case 6:
-						viewer.clearScreen();
-						std::cout << "NOT done yet!";
+						this->viewMail(1);
 						break;
 					default:
 						this->mainMenu(1);
@@ -190,14 +201,74 @@ void BoardManager::mainMenu(int index) {
 		}
 	}
 	else if(this->user.user[0][3]["level"] == "2"){
+		std::cout << index << '\n';
+
 		this->viewer.printMessage("一般會員介面\n");
 		this->viewer.printMessage("Announce    \t【所有看板】\n");
 		this->viewer.printMessage("WritePost   \t【新增文章】\n");
+		this->viewer.printMessage("EditPost    \t【編輯文章】\n");
+		this->viewer.printMessage("DeletePost  \t【刪除文章】\n");
 		this->viewer.printMessage("Mail        \t【信箱】\n");
 
 		char input = _getch();
 		input = _getch();
-
+		system("cls");
+		switch (input)
+		{
+			case 72: //上
+				if (index > 1) {
+					index--;
+				}
+				else if (index == 1)//跳到最後一行
+				{
+					index = 6;
+				}
+				this->mainMenu(index);
+				break;
+			case 80: //下
+				if (index < 6) {
+					index++;
+				}
+				else if (index == 6)//跳到第一行
+				{
+					index = 1;
+				}
+				this->mainMenu(index);
+				break;
+			case 77: //右
+				switch (index)
+				{
+				case 1:
+					this->viewAllBoard(1);
+					break;
+				case 2:
+					this->viewInsertPost(1);
+					break;
+				case 3:
+					this->viewEditPost(1);
+					break;
+				case 4:
+					this->viewDeletePost(1);
+					break;
+				case 5:
+					this->viewMail(1);
+					break;
+				case 6:
+					viewer.clearScreen();
+					std::cout << "NOT done yet!";
+					break;
+				default:
+					this->mainMenu(1);
+					break;
+				}
+				break;
+			case 75: //左
+				this->loginMenu(0);
+				break;
+			default:
+				this->mainMenu(1);
+				break;
+		}
 	}
 
 	return;
@@ -208,7 +279,7 @@ void BoardManager::mainMenu(int index) {
 /// </summary>
 void BoardManager::viewAllBoard(int index) {
 	this->viewer.clearScreen();
-
+	
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
 	viewer.allBoard(allBoard, boardColumn, index);
@@ -243,7 +314,12 @@ void BoardManager::viewAllBoard(int index) {
 			break;
 		case 75: //左
 			system("cls");
-			this->mainMenu(1);
+			if (this->user.user.size() > 0) {
+				this->mainMenu(1);
+			}
+			else {
+				this->loginMenu(0);
+			}
 			break;
 		default:
 			this->viewAllBoard(1);
@@ -611,13 +687,19 @@ void BoardManager::adminDeleteBoard(int index) {
 
 void BoardManager::viewAllPost(int board_id, int index) {
 	this->viewer.clearScreen();
+	this->board.addHot(board_id);
 
 	//std::cout << index << '\n';
 
 	std::vector<std::vector<std::map<std::string, std::string>>> allPost = this->board.getAllPost(board_id);
 	std::vector<std::string> postColumn = this->board.getPostAllColunm();
+	std::vector<bool> isHot;
 
-	viewer.allpost(allPost, postColumn, index);
+	for (auto post : allPost) {
+		isHot.push_back(this->board.isHot(std::stoi(post[0]["id"])));
+	}
+
+	viewer.allpost(allPost, postColumn, isHot, index);
 	char input = _getch();
 	input = _getch();
 
@@ -648,10 +730,10 @@ void BoardManager::viewAllPost(int board_id, int index) {
 		break;
 	case 75: //左
 		viewer.clearScreen();
-		this->mainMenu(1);
+		this->viewAllBoard(1);
 		break;
 	default:
-		this->viewAllPost(board_id, 1);
+		this->viewAllBoard(1);
 		break;
 	}
 }
@@ -661,7 +743,8 @@ void BoardManager::viewInsertPost(int index) {
 
 	std::vector<std::vector<std::map<std::string, std::string>>> allBoard = this->board.getAllBoard();
 	std::vector<std::string> boardColumn = this->board.getBoardAllColunm();
-	viewer.allpost(allBoard, boardColumn, index);
+
+	viewer.allBoard(allBoard, boardColumn, index);
 
 	std::string title, text;
 	char input = _getch();
@@ -743,8 +826,13 @@ void BoardManager::viewEditPost(int index) {
 
 	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
+	std::vector<bool> isHot;
 
-	viewer.allpost(userAllPost, boardColumn, index);
+	for (auto post : userAllPost) {
+		isHot.push_back(false);
+	}
+
+	viewer.allpost(userAllPost, boardColumn, isHot, index);
 
 	std::string title, text;
 	char input = _getch();
@@ -830,8 +918,13 @@ void BoardManager::viewDeletePost(int index) {
 
 	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
+	std::vector<bool> isHot;
 
-	viewer.allpost(userAllPost, boardColumn, index);
+	for (auto post : userAllPost) {
+		isHot.push_back(false);
+	}
+
+	viewer.allpost(userAllPost, boardColumn, isHot, index);
 
 	std::string confirm;
 	char input = _getch();
@@ -907,7 +1000,7 @@ void BoardManager::viewOnePost(int post_id) {
 
 	std::string user = this->user.getUserAccount(std::stoi(post[0][2]["user_id"]));
 
-	for (auto comment : comments) {
+	for (auto& comment : comments) {
 		comment[2]["user_id"] = this->user.getUserAccount(std::stoi(comment[2]["user_id"]));
 	}
 
@@ -921,22 +1014,33 @@ void BoardManager::viewOnePost(int post_id) {
 
 	this->viewer.printMessage("文章: \n" + post[0][4]["text"] + "\n\n\n");
 
-	for (auto comment : comments) {
-		if (comment[3]["action"] == "0") {
-			this->viewer.printMessage("-> ");
-		}
-		if (comment[3]["action"] == "1") {
-			this->viewer.printMessage("推 ");
-		}
-		if (comment[3]["action"] == "2") {
-			this->viewer.printMessage("噓 ");
-		}
+	if(post[0][5]["isDeleted"] == "0"){
+		for (auto comment : comments) {
+			if (comment[5]["isDeleted"] == "0") {
+				if (comment[3]["action"] == "0") {
+					this->viewer.printMessage("-> ");
+				}
+				if (comment[3]["action"] == "1") {
+					this->viewer.printMessage("推 ");
+				}
+				if (comment[3]["action"] == "2") {
+					this->viewer.printMessage("噓 ");
+				}
 
-		this->viewer.printMessage(user + ": " + comment[4]["text"] + "  " +comment[5]["created_at"] + "\n");
+				this->viewer.printMessage(comment[2]["user_id"] + ": " + comment[4]["text"] + "  " + comment[6]["created_at"] + "\n");
+			}else{
+				this->viewer.printMessage("-> ");
+
+				this->viewer.printMessage("??????: " + comment[4]["text"] + "  " + comment[6]["created_at"] + "\n");
+			}
+		}
 	}
 
 	int action = 0;
 	std::string text;
+	std::string adminAction;
+	std::string reason;
+	std::string commentIndex;
 	char input = _getch();
 	input = _getch();
 
@@ -949,7 +1053,7 @@ void BoardManager::viewOnePost(int post_id) {
 		this->viewOnePost(post_id);
 		break;
 	case 77: //右
-		if (this->user.user.size() > 0) {
+		if (this->user.user.size() > 0) {	
 			if (!this->board.isLeavedComment(post_id, std::stoi(this->user.user[0][0]["id"]))) {
 				this->viewer.printMessage("輸入0(沒有心情) 1(推) 2(噓)表達你的心情: ");
 				std::cin >> action;
@@ -958,20 +1062,73 @@ void BoardManager::viewOnePost(int post_id) {
 			this->viewer.printMessage("\n輸入留言: ");
 			std::cin >> text;
 
-			if (this->board.insertComment(post_id, std::stoi(post[0][2]["user_id"]), action, text)) {
+			if (text == "/back") {
+				this->viewOnePost(post_id);
+				return;
+			}
+
+			if (this->board.insertComment(post_id, std::stoi(this->user.user[0][0]["id"]), action, text)) {
 				this->viewer.printMessage("\n新增留言成功，將重新刷新");
 			}
 			else {
 				this->viewer.printMessage("\n新增留言發生錯誤，將重新刷新");
 			}
+
+			Sleep(3000);
+			this->viewer.clearScreen();
+			this->viewOnePost(post_id);	
+			return;
 		}
 
-		this->viewer.clearScreen();
 		this->viewOnePost(post_id);
 		break;
 	case 75: //左
 		viewer.clearScreen();
 		this->viewAllPost(this->board.getBoardId(post_id), 1);
+		break;
+	case 'p':
+		if (this->user.user[0][3]["level"] == "1") {
+			this->viewer.printMessage("\n輸入指令: ");
+			std::cin >> adminAction;
+
+			if (adminAction == "/post") {
+				this->viewer.printMessage("\n輸入原因: ");
+				std::cin >> reason;
+	
+				if (this->board.adminDeletePost(post_id, "此文章已被管理員刪除，原因：" + reason, "此文章已被管理員刪除，原因：" + reason)) {
+					this->viewer.printMessage("\n刪除文章成功，將重新刷新");
+				}
+				else {
+					this->viewer.printMessage("\n刪除文章發生錯誤，將重新刷新");
+				}
+
+				Sleep(3000);
+				this->viewer.clearScreen();
+				this->viewOnePost(post_id);
+				return;
+			}
+
+			if (adminAction == "/comment") {
+				this->viewer.printMessage("\n輸入第幾個留言: ");
+				std::cin >> commentIndex;
+
+				this->viewer.printMessage("\n輸入原因: ");
+				std::cin >> reason;
+
+				if (this->board.adminDeleteComment(std::stoi(comments[std::stoi(commentIndex) - 1][0]["id"]), "此留言已被管理員刪除，原因：" + reason)) {
+					this->viewer.printMessage("\n刪除留言成功，將重新刷新");
+				}
+				else {
+					this->viewer.printMessage("\n刪除留言發生錯誤，將重新刷新");
+				}
+
+				Sleep(3000);
+				this->viewer.clearScreen();
+				this->viewOnePost(post_id);
+				return;
+			}
+			this->viewOnePost(post_id);
+		}
 		break;
 	default:
 		this->viewOnePost(post_id);
@@ -979,4 +1136,134 @@ void BoardManager::viewOnePost(int post_id) {
 	}
 
 	return;
+}
+
+void BoardManager::viewMail(int index) {
+	this->viewer.clearScreen();
+	std::cout << index << '\n';
+	auto ownMails = this->mail.getMail(std::stoi(this->user.user[0][0]["id"]));
+
+	for (auto mail : ownMails) {
+		this->viewer.printMessage("寄信人: " + this->user.getUserAccount(std::stoi(mail[1]["send_id"])) + "\t 標題: " + mail[3]["title"] + "\t 時間: " + mail[5]["created_at"] + "\n");
+	}
+	
+	std::string recipient;
+	std::string title;
+	std::string text;
+	int recipient_id = -1;
+	char input = _getch();
+	input = _getch();
+
+	switch (input)
+	{
+	case 72: //上
+		if (index > 1) {
+			index--;
+		}
+		else if (index == 1)
+		{
+			index = ownMails.size();
+		}
+		this->viewMail(index);
+		break;
+	case 80: //下
+		if (index < ownMails.size()) {
+			index++;
+		}
+		else if (index == ownMails.size())
+		{
+			index = 1;
+		}
+		this->viewMail(index);
+		break;
+	case 77: //右
+		this->viewOneMail(std::stoi(ownMails[index - 1][0]["id"]));
+		break;
+	case 75: //左
+		viewer.clearScreen();
+		this->mainMenu(1);
+		break;
+	case 's':
+		while (true) {
+			viewer.clearScreen();
+			viewer.printMessage("收信人: ");
+			std::cin >> recipient;
+
+			if (recipient == "/back") {
+				this->viewMail(1);
+				return;
+			}
+
+			recipient_id = this->user.findUserId(recipient);
+
+			if (recipient_id == -1) {
+				viewer.printMessage("查無收信人，請重新輸入\n");
+				continue;
+			}
+
+			viewer.printMessage("\n標題: ");
+			std::cin >> title;
+
+			if (title == "/back") {
+				this->viewMail(1);
+				return;
+			}
+
+			viewer.printMessage("\n內容: ");
+			std::cin >> text;
+
+			if (text == "/back") {
+				this->viewMail(1);
+				return;
+			}
+
+			if (this->mail.sendMail(std::stoi(this->user.user[0][0]["id"]), recipient_id, title, text)) {
+				viewer.printMessage("\n寄信成功，3秒後回到信箱");			
+			}
+			else {
+				viewer.printMessage("\n寄信發生錯誤，3秒後回到信箱");
+			}
+
+			Sleep(3000);
+			this->viewMail(1);
+			return;
+		}
+		break;
+	default:
+		this->viewMail(index);
+		break;
+	}
+}
+
+void BoardManager::viewOneMail(int mail_id) {
+	this->viewer.clearScreen();
+
+	auto mail = this->mail.getOneMail(mail_id);
+
+	this->viewer.printMessage("標題: " + mail[0][3]["title"] + "\n");
+	this->viewer.printMessage("寄信人: " + this->user.getUserAccount(std::stoi(mail[0][1]["send_id"])) + "\n");
+	this->viewer.printMessage("內容: " + mail[0][4]["text"] + "\n");
+
+	char input = _getch();
+	input = _getch();
+
+	switch (input)
+	{
+	case 72: //上
+		this->viewOneMail(mail_id);
+		break;
+	case 80: //下
+		this->viewOneMail(mail_id);
+		break;
+	case 77: //右
+		this->viewOneMail(mail_id);
+		break;
+	case 75: //左
+		viewer.clearScreen();
+		this->viewMail(1);
+		break;
+	default:
+		this->viewOneMail(mail_id);
+		break;
+	}
 }

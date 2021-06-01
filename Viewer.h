@@ -13,7 +13,7 @@ public:
     void clearScreen();
     void LoginMenu(int);
     void reLogin();
-    void allpost(std::vector<std::vector<std::map<std::string, std::string>>>, const std::vector<std::string>, int);
+    void allpost(std::vector<std::vector<std::map<std::string, std::string>>>, const std::vector<std::string>, std::vector<bool>, int);
     void signUp();
     void resignUP();
     void adminMainMenu(int);
@@ -72,13 +72,14 @@ void Viewer::reLogin()
     std::cout << "。。。○ 帳號或密碼錯誤!請重新登入!!!\n";
 }
 
-void Viewer::allpost(std::vector<std::vector<std::map<std::string, std::string>>> allpost, std::vector<std::string>postColumn, int status)
+void Viewer::allpost(std::vector<std::vector<std::map<std::string, std::string>>> allpost, std::vector<std::string>postColumn, std::vector<bool> isHot, int status)
 {
     printPTT();
 
     for (int k = 0; k < allpost.size(); k++) {
         if (k + 1 == status) printPoint();
         else std::cout << "   ";
+        if (isHot[k] == true) std::cout << "推爆";
         for (size_t i = 2; i < postColumn.size(); i++) {
             std::cout << allpost[k][i][postColumn[i]] << '\t';
         }
