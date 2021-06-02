@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include <iostream>
 #include <ctime>
-
+#include"Viewer.h"
+Viewer viewer;
 class Slot
 {
 public:
@@ -53,11 +54,14 @@ void Slot::infomation()
     std::cout << "'K' 'K' 'K' \t: $ x 4\n";
     std::cout << "'7' '7' '7' \t: $ x 5\n";
 
-    std::cout << std::endl << std::endl;
+   std::cout << std::endl << std::endl;
+   system("pause");
+
 }
 
 int Slot::Play(int cost)
 {
+    viewer.printPTT();
     char input;
     this->bet = cost;
     std::cout << "投入 $" << this->bet << "為賭金\n";
@@ -78,6 +82,8 @@ void Slot::slot()
     system("cls");
 
     srand(time(NULL));
+
+    viewer.printPTT();
 
     for (int i = 0; i < 3; i++)
     {

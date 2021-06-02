@@ -25,6 +25,7 @@ public:
     void printPoint();
     void userMenu(int);
     void allMail(std::vector<std::vector<std::map<std::string,std::string>>>,int);
+    void allGame(int);
 };
 
 void Viewer::printMessage(std::string str)
@@ -210,11 +211,11 @@ void Viewer::adminMainMenu(int status)
     if (status == 6)
     {
         printPoint();
-        std::cout << "Mail        \t【信    箱】\n\n\n";
+        std::cout << "Mail        \t【信    箱】";
     }
     else
     {
-        std::cout << "   Mail        \t【信    箱】\n\n\n";
+        std::cout << "   Mail        \t【信    箱】";
     }
     if (status == 7)
     {
@@ -223,7 +224,7 @@ void Viewer::adminMainMenu(int status)
     }
     else
     {
-        std::cout << "Game        \t【小遊戲區】\n\n\n";
+        std::cout << "   Game        \t【小遊戲區】\n\n\n";
     }
     std::cout << "(↑)(↓) 選擇  (←) 登出  (→) 選定 ";
 }
@@ -389,20 +390,20 @@ inline void Viewer::userMenu(int status)
     if (status == 5)
     {
         printPoint();
-        std::cout << "Mail        \t【信箱】\n\n";
+        std::cout << "Mail  \t【信箱】";
     }
     else
     {
-        std::cout << "   Mail        \t【信箱】\n\n";
+        std::cout << "   Mail   \t【信箱】";
     }
     if (status == 6)
     {
         printPoint();
-        std::cout << "Game         \t【小遊戲區】\n\n";
+        std::cout << "Game  \t【小遊戲區】\n\n";
     }
     else
     {
-        std::cout << "Game         \t【小遊戲區】\n\n";
+        std::cout << "   Game   \t【小遊戲區】\n\n";
     }
     std::cout << "(↑)(↓) 選擇  (←) 返回  (→) 選定 ";
 
@@ -411,6 +412,39 @@ inline void Viewer::userMenu(int status)
 inline void Viewer::allMail(std::vector<std::vector<std::map<std::string, std::string>>> allMail,int status)
 {
 
+}
+
+inline void Viewer::allGame(int status)
+{
+    printPTT();
+    if (status == 1)
+    {
+        printPoint();
+        std::cout << "賭盤\n";
+    }
+    else
+    {
+        std::cout << "   賭盤\n";
+    }
+    if (status == 2)
+    {
+        printPoint();
+        std::cout << "拉霸機\n";
+    }
+    else
+    {
+        std::cout << "   拉霸機\n";
+    }
+    if (status == 3)
+    {
+        printPoint();
+        std::cout << "猜數字\n\n";
+    }
+    else
+    {
+        std::cout << "   猜數字\n\n";
+    }
+    std::cout << "(↑)(↓) 選擇  (←) 返回  (→) 選定 ";
 }
 
 

@@ -1,8 +1,10 @@
+
 #pragma once
+#include"Viewer.h"
 #include <iostream>
 #include <ctime>
 #include <windows.h>
-
+Viewer viewerG;
 class Guess
 {
 public:
@@ -38,7 +40,7 @@ void Guess::startGame()
 void Guess::guessing()
 {
 	system("cls");
-
+	viewerG.printPTT();
 	int input;
 
 	std::cout << "²q¼Æ¦r : " << this->leftpoint << " ~ " << this->rightpoint << std::endl;

@@ -164,10 +164,11 @@ void BoardManager::login(int status) {
 
 void BoardManager::viewGameManager(int index) {
 	system("cls");
-	std::cout << index;
+	viewer.allGame(index);
+	/*std::cout << index;
 	this->viewer.printMessage("賭盤\n");
 	this->viewer.printMessage("拉霸機\n");
-	this->viewer.printMessage("猜數字\n");
+	this->viewer.printMessage("猜數字\n");*/
 
 	char input = _getch();
 	input = _getch();
@@ -185,16 +186,17 @@ void BoardManager::viewGameManager(int index) {
 		this->viewGameManager(index);
 		break;
 	case 80: //下
-		if (index < 4) {
+		if (index < 3) {
 			index++;
 		}
-		else if (index == 4)//跳到第一行
+		else if (index == 3)//跳到第一行
 		{
 			index = 1;
 		}
 		this->viewGameManager(index);
 		break;
 	case 77: //右
+		system("cls");
 		if (index == 1) {
 			if (this->user->user[0][3]["level"] == "1") {
 				this->viewAdminBetting(1);
@@ -213,6 +215,7 @@ void BoardManager::viewGameManager(int index) {
 		}
 		break;
 	case 75: //左
+		system("cls");
 		this->mainMenu(0);
 		break;
 	default:
@@ -222,11 +225,38 @@ void BoardManager::viewGameManager(int index) {
 }
 
 void BoardManager::viewAdminBetting(int index) {
-	std::cout << index << "\n";
-	this->viewer.printMessage("開盤\n");
-	this->viewer.printMessage("關盤\n");
-	this->viewer.printMessage("下注\n");
+	//std::cout << index << "\n";
+	system("cls");
+	viewer.printPTT();
+	if (index == 1)
+	{
+		viewer.printPoint();
+		this->viewer.printMessage("開盤\n");
+	}
+	else
+	{
+		this->viewer.printMessage("   開盤\n");
+	}
+	if (index == 2)
+	{
+		viewer.printPoint();
+		this->viewer.printMessage("關盤\n");
+	}
+	else
+	{
+		this->viewer.printMessage("   關盤\n");
+	}
+	if (index == 3)
+	{
+		viewer.printPoint();
+		this->viewer.printMessage("下注\n\n");
+	}
+	else
+	{
+		this->viewer.printMessage("   下注\n\n");
+	}
 
+	viewer.printMessage("(↑)(↓) 選擇  (←) 返回  (→) 選定 ");
 	char input = _getch();
 	input = _getch();
 
@@ -243,10 +273,10 @@ void BoardManager::viewAdminBetting(int index) {
 		this->viewAdminBetting(index);
 		break;
 	case 80: //下
-		if (index < 4) {
+		if (index < 3) {
 			index++;
 		}
-		else if (index == 4)//跳到第一行
+		else if (index == 3)//跳到第一行
 		{
 			index = 1;
 		}
@@ -254,22 +284,32 @@ void BoardManager::viewAdminBetting(int index) {
 		break;
 	case 77: //右
 		if (index == 1) {
+			system("cls");
+			viewer.printPTT();
 			this->bettingGame->startBet();
 			this->viewer.printMessage("開設賭盤成功，3秒後跳回賭盤頁面");
 			Sleep(3000);
 			this->viewAdminBetting(1);
 		}
 		if (index == 2) {
+
+			system("cls");
+			viewer.printPTT();
 			this->bettingGame->endBetting();
 			this->viewer.printMessage("關閉賭盤成功，3秒後跳回賭盤頁面");
 			Sleep(3000);
+			system("cls");
+			viewer.printPTT();
 			this->viewAdminBetting(1);
 		}
 		if (index == 3) {
+			system("cls");
+			viewer.printPTT();
 			this->viewBetting();
 		}
 		break;
 	case 75: //左
+		system("cls");
 		this->mainMenu(0);
 		break;
 	default:
@@ -302,6 +342,8 @@ void BoardManager::viewBetting() {
 			this->bettingGame->placeBet(color, bet);
 			this->viewer.printMessage("下注成功，3秒後重新刷新");
 			Sleep(3000);
+			system("cls");
+			viewer.printPTT();
 			this->viewBetting();
 			break;
 		case 75: //左
@@ -320,9 +362,11 @@ void BoardManager::viewBetting() {
 }
 
 void BoardManager::viewSlot() {
+	viewer.printPTT();
 	int cost = 0, gameStatus = 0;
 	std::cout << "輸入賭金: ";
 	std::cin >> cost;
+	system("cls");
 	std::vector<std::pair<std::string, std::string>> tmp;
 	tmp.push_back(std::pair<std::string, std::string>("p_point",std::to_string(this->user->getUserPoint() - cost)));
 
@@ -339,7 +383,7 @@ void BoardManager::viewSlot() {
 
 	tmp.clear();
 	tmp.push_back(std::pair<std::string, std::string>("p_point", std::to_string(this->user->getUserPoint() + cost)));
-
+	//viewer.printPTT();
 	this->db->UpdateData("users", std::stoi(this->user->user[0][0]["id"]), tmp);
 	
 	std::cout << "遊戲結束，3秒後返回遊戲選單\n";
@@ -444,10 +488,10 @@ void BoardManager::mainMenu(int index) {
 				this->mainMenu(index);
 				break;
 			case 80: //下
-				if (index < 7) {
+				if (index < 6) {
 					index++;
 				}
-				else if (index == 7)//跳到第一行
+				else if (index == 6)//跳到第一行
 				{
 					index = 1;
 				}
