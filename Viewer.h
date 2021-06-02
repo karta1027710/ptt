@@ -211,11 +211,11 @@ void Viewer::adminMainMenu(int status)
     if (status == 6)
     {
         printPoint();
-        std::cout << "Mail        \t【信    箱】";
+        std::cout << "Mail        \t【信    箱】\n";
     }
     else
     {
-        std::cout << "   Mail        \t【信    箱】";
+        std::cout << "   Mail        \t【信    箱】\n";
     }
     if (status == 7)
     {
@@ -390,11 +390,11 @@ inline void Viewer::userMenu(int status)
     if (status == 5)
     {
         printPoint();
-        std::cout << "Mail  \t【信箱】";
+        std::cout << "Mail  \t【信箱】\n";
     }
     else
     {
-        std::cout << "   Mail   \t【信箱】";
+        std::cout << "   Mail   \t【信箱】\n";
     }
     if (status == 6)
     {
