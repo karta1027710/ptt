@@ -20,6 +20,8 @@ class User {
 
 		int findUserId(std::string account);
 
+		int getUserPoint();
+
 		std::string getUserAccount(int user_id);
 
 		bool insertUser(std::string account, std::string password);
@@ -41,6 +43,14 @@ bool User::login() {
 	}
 
 	return 1;
+}
+
+int User::getUserPoint() {
+	std::string sql = "select * from `users` where `id` = " + this->user[0][0]["id"];
+
+	auto data = this->db->Select(sql);
+
+	return std::stoi(data[0][4]["p_point"]);
 }
 
 int User::findUserId(std::string account) {

@@ -1,3 +1,4 @@
 C:\Users\user\Desktop\PTT\Debug\ptt.exe
 C:\Users\user\Desktop\ptt project\ptt 0529 523\Debug\ptt.exe
 C:\Users\user\Desktop\ptt project\ptt 0530 1055\Debug\ptt.exe
+C:\Users\user\Desktop\ptt project\ptt 0601\Debug\ptt.exe

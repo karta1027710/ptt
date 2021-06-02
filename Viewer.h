@@ -23,6 +23,8 @@ public:
     void Color(int);
     void printPTT();
     void printPoint();
+    void userMenu(int);
+    void allMail(std::vector<std::vector<std::map<std::string,std::string>>>,int);
 };
 
 void Viewer::printMessage(std::string str)
@@ -52,8 +54,8 @@ void Viewer::LoginMenu(int status)
     std::cout << "             █　　　　　█                     \n\n";
     std::cout << "            ◢◤▕　　　▎◥◣                       \n\n";
     std::cout << "          ▕  ▃◣◢▅▅▅◣◢▃                         \n";
-    if (status == 0)std::cout << "輸入/login 登入 or /register 註冊帳號:\n";
-    else std::cout << "無效指令!!!\n輸入/login 登入 or /register 註冊帳號:\n";
+    if (status == 0)std::cout << "輸入/login 登入 or /register 註冊帳號 /guest 參觀:\n";
+    else std::cout << "無效指令!!!\n輸入/login 登入 or /register 註冊帳號 or /guest 參觀:\n";
 }
 
 void Viewer::reLogin()
@@ -76,12 +78,20 @@ void Viewer::allpost(std::vector<std::vector<std::map<std::string, std::string>>
 {
     printPTT();
 
+    std::cout << "所有貼文\n\n";
+
     for (int k = 0; k < allpost.size(); k++) {
         if (k + 1 == status) printPoint();
         else std::cout << "   ";
-        if (isHot[k] == true) std::cout << "推爆";
-        for (size_t i = 2; i < postColumn.size(); i++) {
-            std::cout << allpost[k][i][postColumn[i]] << '\t';
+        for (size_t i = 3; i < postColumn.size(); i++) {
+            if (i == 3)
+                std::cout << allpost[k][i][postColumn[i]] << "       ";
+        }
+        if (isHot[k] == true)
+        {
+            Color(236);
+            std::cout << "推爆";
+            Color(15);
         }
         std::cout << "\n";
     }
@@ -93,6 +103,7 @@ void Viewer::allpost(std::vector<std::vector<std::map<std::string, std::string>>
 
 void Viewer::signUp()
 {
+    printPTT();
     std::cout << "       ◢█◣▄▄▅▅▄▄◢█◣　　　　　　　　\n";
     std::cout << "      ◢████████████◣　　　　　　　\n";
     std::cout << "      ███████████████　　　　　　　\n";
@@ -143,6 +154,14 @@ void Viewer::adminMainMenu(int status)
     printPTT();
 
     std::cout << "管理員功能介面\n\n";
+
+    Color(2);
+    std::cout << "PTT   ███〕▄▄▄▄▄▄\n";
+    std::cout << "  ▂▄▅█████▅▄▃▂ 免費都更戰車\n";
+    std::cout << "  ██████████████　\n";
+    std::cout << " ◥⊙▲⊙▲⊙▲⊙◤\n\n";
+
+    Color(15);
     if (status == 1)
     {
         printPoint();
@@ -197,12 +216,25 @@ void Viewer::adminMainMenu(int status)
     {
         std::cout << "   Mail        \t【信    箱】\n\n\n";
     }
+    if (status == 7)
+    {
+        printPoint();
+        std::cout << "Game        \t【小遊戲區】\n\n\n";
+    }
+    else
+    {
+        std::cout << "Game        \t【小遊戲區】\n\n\n";
+    }
     std::cout << "(↑)(↓) 選擇  (←) 登出  (→) 選定 ";
 }
 
 inline void Viewer::adminManageBoard(int status)
 {
     printPTT();
+
+    
+
+    std::cout << "管理員版面管理\n\n";
 
     if (status == 1)
     {
@@ -237,6 +269,9 @@ inline void Viewer::adminManageBoard(int status)
 void Viewer::allBoard(std::vector<std::vector<std::map<std::string, std::string>>> allBoard, std::vector<std::string>boardColumn, int status)
 {
     printPTT();
+
+    std::cout << "所有看板\n\n";
+    std::cout << "   版名\t\t分類\t標題\t人氣\n";
     for (int k = 0; k < allBoard.size(); k++) {
         if (k + 1 == status)         printPoint();
         
@@ -302,6 +337,80 @@ inline void Viewer::printPoint()
     Color(i);
     std::cout << "-> ";
     Color(15);
+}
+
+inline void Viewer::userMenu(int status)
+{
+    printPTT();
+    Color(2);
+    std::cout << "PTT   ███〕▄▄▄▄▄▄\n";
+    std::cout << "  ▂▄▅█████▅▄▃▂ 免費都更戰車\n";
+    std::cout << "  ██████████████　\n";
+    std::cout << " ◥⊙▲⊙▲⊙▲⊙◤\n";
+    std::cout << "一般使用者介面\n\n";
+
+    Color(15);
+    if (status == 1)
+    {
+        printPoint();
+        std::cout << "Announce    \t【所有看板】\n";
+    }
+    else
+    {
+        std::cout << "   Announce    \t【所有看板】\n";
+    }
+    if (status == 2)
+    {
+        printPoint();
+        std::cout << "WritePost   \t【新增文章】\n";
+    }
+    else
+    {
+        std::cout << "   WritePost   \t【新增文章】\n";
+    }
+    if (status == 3)
+    {
+        printPoint();
+        std::cout << "EditPost    \t【編輯文章】\n";
+    }
+    else
+    {
+        std::cout << "   EditPost    \t【編輯文章】\n";
+    }
+    if (status == 4)
+    {
+        printPoint();
+        std::cout << "DeletePost  \t【刪除文章】\n";
+    }
+    else
+    {
+        std::cout << "   DeletePost  \t【刪除文章】\n";
+    }
+    if (status == 5)
+    {
+        printPoint();
+        std::cout << "Mail        \t【信箱】\n\n";
+    }
+    else
+    {
+        std::cout << "   Mail        \t【信箱】\n\n";
+    }
+    if (status == 6)
+    {
+        printPoint();
+        std::cout << "Game         \t【小遊戲區】\n\n";
+    }
+    else
+    {
+        std::cout << "Game         \t【小遊戲區】\n\n";
+    }
+    std::cout << "(↑)(↓) 選擇  (←) 返回  (→) 選定 ";
+
+}
+
+inline void Viewer::allMail(std::vector<std::vector<std::map<std::string, std::string>>> allMail,int status)
+{
+
 }
 
 
