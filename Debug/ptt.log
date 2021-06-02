@@ -1,15 +1,20 @@
 ﻿  main.cpp
-C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(83,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(266,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(303,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
-C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(321,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(305,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(517,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(653,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(728,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(782,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(871,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(965,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(1187,16): warning C4018: '<': signed/unsigned 不相符
-C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(1221,13): warning C4018: '<': signed/unsigned 不相符
-  ptt.vcxproj -> C:\Users\user\Desktop\ptt project\ptt 0601\Debug\ptt.exe
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(83,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(275,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(312,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(330,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Guess.h(31,12): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Betting.h(185,20): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\Betting.h(204,20): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\SlotMachine.h(80,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(530,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(742,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(878,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(953,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1007,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1096,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1190,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1412,16): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1446,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\karta\OneDrive\桌面\ptt\ptt\SlotMachine.h(74): warning C4715: 'Slot::Play': 不是所有控制路徑都傳回值
+  ptt.vcxproj -> C:\Users\karta\OneDrive\桌面\ptt\Debug\ptt.exe

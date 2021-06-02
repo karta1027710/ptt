@@ -5,8 +5,11 @@
 #include "User.h"
 #include "Mail.h"
 #include "Board.h"
+#include "Guess.h"
 #include "Viewer.h"
+#include "Betting.h"
 #include "Database.h"
+#include "SlotMachine.h"
 
 
 class BoardManager {
@@ -14,8 +17,13 @@ class BoardManager {
 		Database* db = new Database;
 		Viewer viewer;
 		Board board = Board(this->db);
-		User user = User(this->db);
+		User* user = new User(this->db);
 		Mail mail = Mail(this->db);
+		Betting* bettingGame;
+		Guess guessGame = Guess();
+		Slot slotGame = Slot();
+
+		BoardManager();
 
 		void loginMenu(int);
 		void registerAccount(int);
@@ -42,6 +50,20 @@ class BoardManager {
 		void viewMail(int index);
 
 		void viewOneMail(int mail_id);
+
+		void viewGameManager(int index);
+
+		void viewAdminBetting(int index);
+
+		void viewBetting();
+
+		void viewSlot();
+
+		void viewGuess();
+};
+
+BoardManager::BoardManager() {
+
 };
 
 void BoardManager::loginMenu(int status/*判斷輸入無效指令*/) {
@@ -82,7 +104,7 @@ void BoardManager::registerAccount(int status) {
 	this->viewer.printMessage("輸入帳號: ");
 	std::cin >> account;
 
-	if (this->user.findUserId(account) != -1) {
+	if (this->user->findUserId(account) != -1) {
 		this->viewer.printMessage("\n帳號重複\n");
 		//this->viewer.clearScreen();
 		this->registerAccount(1);
@@ -102,7 +124,7 @@ void BoardManager::registerAccount(int status) {
 		return;
 	}
 
-	if (!this->user.insertUser(account, password)) {
+	if (!this->user->insertUser(account, password)) {
 		this->viewer.printMessage("\n註冊帳號發生錯誤，請稍後再試\n");
 		this->registerAccount(0);
 		return;
@@ -123,7 +145,7 @@ void BoardManager::login(int status) {
 	else this->viewer.reLogin();
 
 	int isLogin = 0;
-	isLogin = this->user.login();
+	isLogin = this->user->login();
 
 	if (!isLogin) {
 		this->viewer.clearScreen();
@@ -133,9 +155,197 @@ void BoardManager::login(int status) {
 
 	this->viewer.clearScreen();
 
-	std::string name = this->user.user[0][1]["account"];
+	std::string name = this->user->user[0][1]["account"];
+
+	this->bettingGame = new Betting(db,user);
 
 	this->mainMenu(1);
+}
+
+void BoardManager::viewGameManager(int index) {
+	system("cls");
+	std::cout << index;
+	this->viewer.printMessage("賭盤\n");
+	this->viewer.printMessage("拉霸機\n");
+	this->viewer.printMessage("猜數字\n");
+
+	char input = _getch();
+	input = _getch();
+
+	switch (input)
+	{
+	case 72: //上
+		if (index > 1) {
+			index--;
+		}
+		else if (index == 1)//跳到最後一行
+		{
+			index = 3;
+		}
+		this->viewGameManager(index);
+		break;
+	case 80: //下
+		if (index < 4) {
+			index++;
+		}
+		else if (index == 4)//跳到第一行
+		{
+			index = 1;
+		}
+		this->viewGameManager(index);
+		break;
+	case 77: //右
+		if (index == 1) {
+			if (this->user->user[0][3]["level"] == "1") {
+				this->viewAdminBetting(1);
+			}
+			if (this->user->user[0][3]["level"] == "2") {
+				this->viewBetting();
+			}
+		}
+
+		if (index == 2) {
+			this->viewSlot();
+		}
+
+		if (index == 3) {
+			this->viewGuess();
+		}
+		break;
+	case 75: //左
+		this->mainMenu(0);
+		break;
+	default:
+		this->viewGameManager(1);
+		break;
+	}
+}
+
+void BoardManager::viewAdminBetting(int index) {
+	std::cout << index << "\n";
+	this->viewer.printMessage("開盤\n");
+	this->viewer.printMessage("關盤\n");
+	this->viewer.printMessage("下注\n");
+
+	char input = _getch();
+	input = _getch();
+
+	switch (input)
+	{
+	case 72: //上
+		if (index > 1) {
+			index--;
+		}
+		else if (index == 1)//跳到最後一行
+		{
+			index = 3;
+		}
+		this->viewAdminBetting(index);
+		break;
+	case 80: //下
+		if (index < 4) {
+			index++;
+		}
+		else if (index == 4)//跳到第一行
+		{
+			index = 1;
+		}
+		this->viewAdminBetting(index);
+		break;
+	case 77: //右
+		if (index == 1) {
+			this->bettingGame->startBet();
+			this->viewer.printMessage("開設賭盤成功，3秒後跳回賭盤頁面");
+			Sleep(3000);
+			this->viewAdminBetting(1);
+		}
+		if (index == 2) {
+			this->bettingGame->endBetting();
+			this->viewer.printMessage("關閉賭盤成功，3秒後跳回賭盤頁面");
+			Sleep(3000);
+			this->viewAdminBetting(1);
+		}
+		if (index == 3) {
+			this->viewBetting();
+		}
+		break;
+	case 75: //左
+		this->mainMenu(0);
+		break;
+	default:
+		this->viewAdminBetting(1);
+		break;
+	}
+}
+
+void BoardManager::viewBetting() {
+	if (this->bettingGame->isOpen()) {
+		this->bettingGame->viewBoard();
+
+		char input = _getch();
+		input = _getch();
+
+		char color;
+		int bet = 0;
+
+		switch (input)
+		{
+		case 72: //上
+			this->viewBetting();
+			break;
+		case 80: //下
+			this->viewBetting();
+			break;
+		case 77: //右
+			this->viewer.printMessage("輸入下注顏色及金額: ");
+			std::cin >> color >> bet;
+			this->bettingGame->placeBet(color, bet);
+			this->viewer.printMessage("下注成功，3秒後重新刷新");
+			Sleep(3000);
+			this->viewBetting();
+			break;
+		case 75: //左
+			this->viewGameManager(1);
+			break;
+		default:
+			this->viewBetting();
+			break;
+		}
+	}else{
+		std::cout << "尚未開盤，請稍後再試，3秒後跳回遊戲選單\n";
+		Sleep(3000);
+		this->viewGameManager(1);
+	}
+	return;
+}
+
+void BoardManager::viewSlot() {
+	int cost = 0, gameStatus = 0;
+	std::cout << "輸入賭金: ";
+	std::cin >> cost;
+	std::vector<std::pair<std::string, std::string>> tmp;
+	tmp.push_back(std::pair<std::string, std::string>("p_point",std::to_string(this->user->getUserPoint() - cost)));
+
+	this->db->UpdateData("users", std::stoi(this->user->user[0][0]["id"]), tmp);
+	
+	gameStatus = this->slotGame.startGame(cost);
+	
+	if (gameStatus == 1) {
+		cost = 0;
+	}
+	else {
+		cost *= gameStatus;
+	}
+
+	tmp.clear();
+	tmp.push_back(std::pair<std::string, std::string>("p_point", std::to_string(this->user->getUserPoint() + cost)));
+
+	this->db->UpdateData("users", std::stoi(this->user->user[0][0]["id"]), tmp);
+	
+	std::cout << "遊戲結束，3秒後返回遊戲選單\n";
+	Sleep(3000);
+	this->viewGameManager(1);
+	return;
 }
 
 /// <summary>
@@ -143,7 +353,7 @@ void BoardManager::login(int status) {
 /// </summary>
 void BoardManager::mainMenu(int index) {
 	/* 改這邊的viewer主菜單就可以了*/
-	if (this->user.user[0][3]["level"] == "1") {
+	if (this->user->user[0][3]["level"] == "1") {
 		viewer.adminMainMenu(index);
 
 		char input = _getch();
@@ -157,15 +367,15 @@ void BoardManager::mainMenu(int index) {
 				}
 				else if (index == 1)//跳到最後一行
 				{
-					index = 6;
+					index = 7;
 				}
 				this->mainMenu(index);
 				break;
 			case 80: //下
-				if (index < 6) {
+				if (index < 8) {
 					index++;
 				}
-				else if (index == 6)//跳到第一行
+				else if (index == 8)//跳到第一行
 				{
 					index = 1;
 				}
@@ -189,9 +399,11 @@ void BoardManager::mainMenu(int index) {
 					case 5:
 						this->viewDeletePost(1);
 						break;
-
 					case 6:
 						this->viewMail(1);
+						break;
+					case 7:
+						this->viewGameManager(1);
 						break;
 					default:
 						this->mainMenu(1);
@@ -206,7 +418,7 @@ void BoardManager::mainMenu(int index) {
 				break;
 		}
 	}
-	else if(this->user.user[0][3]["level"] == "2"){
+	else if(this->user->user[0][3]["level"] == "2"){
 		//std::cout << index << '\n';
 		viewer.userMenu(index);
 		/*this->viewer.printMessage("一般會員介面\n");
@@ -227,15 +439,15 @@ void BoardManager::mainMenu(int index) {
 				}
 				else if (index == 1)//跳到最後一行
 				{
-					index = 5;
+					index = 6;
 				}
 				this->mainMenu(index);
 				break;
 			case 80: //下
-				if (index < 5) {
+				if (index < 7) {
 					index++;
 				}
-				else if (index == 5)//跳到第一行
+				else if (index == 7)//跳到第一行
 				{
 					index = 1;
 				}
@@ -259,6 +471,9 @@ void BoardManager::mainMenu(int index) {
 				case 5:
 					this->viewMail(1);
 					break;
+				case 6:
+					this->viewGameManager(1);
+					break;
 				default:
 					this->mainMenu(1);
 					break;
@@ -273,6 +488,16 @@ void BoardManager::mainMenu(int index) {
 		}
 	}
 
+	return;
+}
+
+void BoardManager::viewGuess() {
+	system("cls");
+	this->guessGame.startGame();
+
+	std::cout << "結束遊戲，3秒後跳回主頁面\n";
+	Sleep(3000);
+	this->viewGameManager(1);
 	return;
 }
 
@@ -316,7 +541,7 @@ void BoardManager::viewAllBoard(int index) {
 			break;
 		case 75: //左
 			system("cls");
-			if (this->user.user.size() > 0) {
+			if (this->user->user.size() > 0) {
 				this->mainMenu(1);
 			}
 			else {
@@ -457,7 +682,7 @@ void BoardManager::adminInsertBoard() {
 		}
 
 		if (userAccount != "0") {
-			user_id = this->user.findUserId(userAccount);
+			user_id = this->user->findUserId(userAccount);
 
 			if (user_id == -1) {
 				this->viewer.printMessage("\n查無看板管理員帳號\n");
@@ -584,7 +809,7 @@ void BoardManager::adminEditBoard(int index) {
 				}
 
 				if (userAccount != "0") {
-					user_id = this->user.findUserId(userAccount);
+					user_id = this->user->findUserId(userAccount);
 
 					if (user_id == -1) {
 						this->viewer.printMessage("\n查無看板管理員帳號\n");
@@ -812,7 +1037,7 @@ void BoardManager::viewInsertPost(int index) {
 			return;
 		}
 
-		if (this->board.insertPost(stoi(allBoard[index - 1][0]["id"]), stoi(this->user.user[0][0]["id"]), title, text)) {
+		if (this->board.insertPost(stoi(allBoard[index - 1][0]["id"]), stoi(this->user->user[0][0]["id"]), title, text)) {
 			this->viewer.printMessage("\n新增文章成功，三秒後跳回看板區");
 		}
 		else {
@@ -841,7 +1066,7 @@ void BoardManager::viewEditPost(int index) {
 	this->viewer.clearScreen();
 	//this->viewer.printPTT();
 
-	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
+	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user->user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
 	std::vector<bool> isHot;
 
@@ -935,7 +1160,7 @@ void BoardManager::viewDeletePost(int index) {
 	this->viewer.clearScreen();
 	//this->viewer.printPTT();
 
-	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user.user[0][0]["id"]));
+	std::vector<std::vector<std::map<std::string, std::string>>> userAllPost = this->board.getUserPost(std::stoi(this->user->user[0][0]["id"]));
 	std::vector<std::string> boardColumn = this->board.getPostAllColunm();
 	std::vector<bool> isHot;
 
@@ -1018,10 +1243,10 @@ void BoardManager::viewOnePost(int post_id) {
 	auto post = this->board.getOnePost(post_id);
 	auto comments = this->board.getOnePostComment(post_id);
 
-	std::string user = this->user.getUserAccount(std::stoi(post[0][2]["user_id"]));
+	std::string user = this->user->getUserAccount(std::stoi(post[0][2]["user_id"]));
 
 	for (auto& comment : comments) {
-		comment[2]["user_id"] = this->user.getUserAccount(std::stoi(comment[2]["user_id"]));
+		comment[2]["user_id"] = this->user->getUserAccount(std::stoi(comment[2]["user_id"]));
 	}
 
 	this->viewer.printMessage("看板: " + post[0][1]["board_id"] + "\n\n");
@@ -1085,8 +1310,8 @@ void BoardManager::viewOnePost(int post_id) {
 		this->viewOnePost(post_id);
 		break;
 	case 77: //右
-		if (this->user.user.size() > 0) {	
-			if (!this->board.isLeavedComment(post_id, std::stoi(this->user.user[0][0]["id"]))) {
+		if (this->user->user.size() > 0) {	
+			if (!this->board.isLeavedComment(post_id, std::stoi(this->user->user[0][0]["id"]))) {
 				this->viewer.printMessage("輸入0(留言) 1(推) 2(噓) (推噓限一次): ");
 				std::cin >> action;
 			}
@@ -1099,7 +1324,7 @@ void BoardManager::viewOnePost(int post_id) {
 				return;
 			}
 
-			if (this->board.insertComment(post_id, std::stoi(this->user.user[0][0]["id"]), action, text)) {
+			if (this->board.insertComment(post_id, std::stoi(this->user->user[0][0]["id"]), action, text)) {
 				this->viewer.printMessage("\n新增留言成功，將重新刷新");
 			}
 			else {
@@ -1119,7 +1344,7 @@ void BoardManager::viewOnePost(int post_id) {
 		this->viewAllPost(this->board.getBoardId(post_id), 1);
 		break;
 	case 'p':
-		if (this->user.user[0][3]["level"] == "1") {
+		if (this->user->user[0][3]["level"] == "1") {
 			this->viewer.printMessage("\n輸入指令(刪文/post，刪留言/comment): ");
 			std::cin >> adminAction;
 
@@ -1181,21 +1406,21 @@ void BoardManager::viewMail(int index) {
 	std::cout << "          ＼ ︵　　︵　 　 丫 ∕\n";
 	std::cout << "..........  (＠)═(＠) ＿ △ ／\n\n";
 	viewer.Color(15);
-	auto ownMails = this->mail.getMail(std::stoi(this->user.user[0][0]["id"]));
+	auto ownMails = this->mail.getMail(std::stoi(this->user->user[0][0]["id"]));
 
 	//viewer.allMail(ownMails, index);
 	for (int i=0;i< ownMails.size();i++)
 	{
 		if (index - 1 == i) viewer.printPoint();
 		else viewer.printMessage("   ");
-		this->viewer.printMessage("寄信人: " + this->user.getUserAccount(std::stoi(ownMails[i][1]["send_id"])) + "\t 標題: " + ownMails[i][3]["title"] + "\t 時間: " + ownMails[i][5]["created_at"] + "\n");
+		this->viewer.printMessage("寄信人: " + this->user->getUserAccount(std::stoi(ownMails[i][1]["send_id"])) + "\t 標題: " + ownMails[i][3]["title"] + "\t 時間: " + ownMails[i][5]["created_at"] + "\n");
 	}
 
 	viewer.printMessage("\n(↑)(↓) 選擇  (←) 返回  (→) 選定 (s)寄信");
 
 	//for (auto mail : ownMails)
 	//{
-	//	this->viewer.printMessage("寄信人: " + this->user.getUserAccount(std::stoi(mail[1]["send_id"])) + "\t 標題: " + mail[3]["title"] + "\t 時間: " + mail[5]["created_at"] + "\n");
+	//	this->viewer.printMessage("寄信人: " + this->user->getUserAccount(std::stoi(mail[1]["send_id"])) + "\t 標題: " + mail[3]["title"] + "\t 時間: " + mail[5]["created_at"] + "\n");
 	//}
 	
 	std::string recipient;
@@ -1252,7 +1477,7 @@ void BoardManager::viewMail(int index) {
 				return;
 			}
 
-			recipient_id = this->user.findUserId(recipient);
+			recipient_id = this->user->findUserId(recipient);
 
 			if (recipient_id == -1) {
 				viewer.printMessage("查無收信人，請重新輸入\n");
@@ -1275,7 +1500,7 @@ void BoardManager::viewMail(int index) {
 				return;
 			}
 
-			if (this->mail.sendMail(std::stoi(this->user.user[0][0]["id"]), recipient_id, title, text)) {
+			if (this->mail.sendMail(std::stoi(this->user->user[0][0]["id"]), recipient_id, title, text)) {
 				viewer.printMessage("\n寄信成功，3秒後回到信箱");			
 			}
 			else {
@@ -1299,7 +1524,7 @@ void BoardManager::viewOneMail(int mail_id) {
 	auto mail = this->mail.getOneMail(mail_id);
 
 	this->viewer.printMessage("標題: " + mail[0][3]["title"] + "\n");
-	this->viewer.printMessage("寄信人: " + this->user.getUserAccount(std::stoi(mail[0][1]["send_id"])) + "\n");
+	this->viewer.printMessage("寄信人: " + this->user->getUserAccount(std::stoi(mail[0][1]["send_id"])) + "\n");
 	this->viewer.printMessage("內容: " + mail[0][4]["text"] + "\n");
 
 	char input = _getch();

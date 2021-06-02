@@ -216,6 +216,15 @@ void Viewer::adminMainMenu(int status)
     {
         std::cout << "   Mail        \t【信    箱】\n\n\n";
     }
+    if (status == 7)
+    {
+        printPoint();
+        std::cout << "Game        \t【小遊戲區】\n\n\n";
+    }
+    else
+    {
+        std::cout << "Game        \t【小遊戲區】\n\n\n";
+    }
     std::cout << "(↑)(↓) 選擇  (←) 登出  (→) 選定 ";
 }
 
@@ -385,6 +394,15 @@ inline void Viewer::userMenu(int status)
     else
     {
         std::cout << "   Mail        \t【信箱】\n\n";
+    }
+    if (status == 6)
+    {
+        printPoint();
+        std::cout << "Game         \t【小遊戲區】\n\n";
+    }
+    else
+    {
+        std::cout << "Game         \t【小遊戲區】\n\n";
     }
     std::cout << "(↑)(↓) 選擇  (←) 返回  (→) 選定 ";
 
