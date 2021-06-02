@@ -1,14 +1,15 @@
 ﻿  main.cpp
-C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(79,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(240,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(277,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
-C:\Users\karta\OneDrive\桌面\ptt\ptt\Viewer.h(295,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(303,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(512,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(646,14): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(719,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(766,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(854,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(946,13): warning C4018: '<': signed/unsigned 不相符
-C:\Users\karta\OneDrive\桌面\ptt\ptt\BoardManager.h(1170,13): warning C4018: '<': signed/unsigned 不相符
-  ptt.vcxproj -> C:\Users\karta\OneDrive\桌面\ptt\Debug\ptt.exe
+C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(83,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(266,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(303,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\user\Desktop\ptt project\ptt 0601\Viewer.h(321,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(305,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(517,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(653,14): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(728,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(782,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(871,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(965,13): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(1187,16): warning C4018: '<': signed/unsigned 不相符
+C:\Users\user\Desktop\ptt project\ptt 0601\BoardManager.h(1221,13): warning C4018: '<': signed/unsigned 不相符
+  ptt.vcxproj -> C:\Users\user\Desktop\ptt project\ptt 0601\Debug\ptt.exe

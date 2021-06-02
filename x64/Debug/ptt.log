@@ -1,6 +1,13 @@
 ﻿  main.cpp
-C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(236,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
-C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(452,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
-C:\Users\user\Desktop\ptt project\ptt 0529 523\BoardManager.h(586,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\Viewer.h(277,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\user\source\repos\karta1027710\ptt\Viewer.h(295,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(298,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(507,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(641,28): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(714,26): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(761,27): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(849,30): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(941,30): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\user\source\repos\karta1027710\ptt\BoardManager.h(1165,27): warning C4267: '=': 將 'size_t' 轉換為 'int'，資料可能遺失
 LINK : fatal error LNK1104: 無法開啟檔案 'libmysql.lib'
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(997,5): error MSB6006: "link.exe" 以返回碼 1104 結束。
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(1075,5): error MSB6006: "link.exe" 以返回碼 1104 結束。
